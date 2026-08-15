@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SilentMoonNetwork
 
 public struct CourseSummary: Decodable {
     public let id: String

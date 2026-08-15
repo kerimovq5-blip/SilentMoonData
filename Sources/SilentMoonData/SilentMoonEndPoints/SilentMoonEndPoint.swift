@@ -7,7 +7,6 @@
 
 import Foundation
 import SilentMoonNetworkCommon
-import SilentMoonDTOs
 
 public enum SilentMoonEndPoint: EndPoint {
     

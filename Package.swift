@@ -24,7 +24,7 @@ let package = Package(
         .target(
             name: "SilentMoonData" ,
             dependencies: [
-                .product(name: "SilentMoonNetwork", package: "SilentMoonNetwork")
+                .product(name: "SilentMoonNetworkCommon", package: "SilentMoonNetwork")
             ]
         ),
 
