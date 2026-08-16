@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SilentMoonNetworkCommon
 
 public struct EmptyResponse: Decodable {
     public init() {}
