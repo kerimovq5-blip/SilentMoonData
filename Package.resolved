@@ -1,5 +1,5 @@
 {
-  "originHash" : "b758309508a049e742327e27bcd229cb76047961dc55a9ed1f52dc2ac5bfe594",
+  "originHash" : "67bcafb584d2844cd907d8c2e4f35d0d732c5d49aefd2caa59a18d89f6a75681",
   "pins" : [
     {
       "identity" : "silentmoonnetwork",
@@ -7,7 +7,7 @@
       "location" : "https://github.com/kerimovq5-blip/SilentMoonNetwork",
       "state" : {
         "branch" : "main",
-        "revision" : "ffb8865f62243d23712e6858e08c1e958b2e49eb"
+        "revision" : "24f7f02657e242c7120a7e0d39f146febcac3cf8"
       }
     }
   ],
