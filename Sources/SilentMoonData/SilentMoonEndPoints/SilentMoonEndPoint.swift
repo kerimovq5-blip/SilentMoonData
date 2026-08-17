@@ -26,8 +26,8 @@ public enum SilentMoonEndPoint: EndPoint {
     case updateTopics(topicIds: [String])
     case setReminder(time: String, days: [Int], message: String)
     case getReminders
-    case updateReminder(id: String, time: String, days: [Int], message: String)
-    case deleteReminder(id: String)
+    case updateReminder(id: Int, time: String, days: [Int], message: String)
+    case deleteReminder(id: Int)
 
     public var path: String {
         switch self {

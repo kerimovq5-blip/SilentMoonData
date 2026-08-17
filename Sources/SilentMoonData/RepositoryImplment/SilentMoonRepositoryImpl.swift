@@ -14,6 +14,7 @@ public struct EmptyResponse: Decodable {
 }
 
 public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Sendable {
+
     private let networkManager: NetworkManager<ApiErrorEnvelope>
     private let tokenStore: TokenStore
 
@@ -185,5 +186,42 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
 
     public func updateTopics(topicIds: [String]) async -> Result<[String], Error> {
         await requestWithRefresh(endPoint: SilentMoonEndPoint.updateTopics(topicIds: topicIds))
+    }
+    
+    public func getReminders() async -> Result<[ReminderResponseEntity], Error> {
+        let result: Result<[ReminderResponse], Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.getReminders
+        )
+        return result.map { responses in responses.map { $0.toEntity() } }
+    }
+
+    public func setReminder(
+        time: String,
+        days: [Int],
+        message: String
+    ) async -> Result<ReminderResponseEntity, Error> {
+        let result: Result<ReminderResponse, Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.setReminder(time: time, days: days, message: message)
+        )
+        return result.map { $0.toEntity() }
+    }
+
+    public func updateReminder(
+        id: Int,
+        time: String,
+        days: [Int],
+        message: String
+    ) async -> Result<ReminderResponseEntity, Error> {
+        let result: Result<ReminderResponse, Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.updateReminder(id: id, time: time, days: days, message: message)
+        )
+        return result.map { $0.toEntity() }
+    }
+
+    public func deleteReminder(id: Int) async -> Result<Void, Error> {
+        let result: Result<EmptyResponse, Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.deleteReminder(id: id)
+        )
+        return result.map { _ in () }
     }
 }
