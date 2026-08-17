@@ -6,13 +6,14 @@
 //
 
 import Foundation
+import SilentMoonDomain
 import SilentMoonNetwork
 
 public struct EmptyResponse: Decodable {
     public init() {}
 }
 
-public final class SilentMoonApiService {
+public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Sendable {
     private let networkManager: NetworkManager<ApiErrorEnvelope>
     private let tokenStore: TokenStore
 
@@ -33,6 +34,7 @@ public final class SilentMoonApiService {
               endPoint.requiresAuth else {
             return result
         }
+        
         let refreshResult = await refreshToken()
         switch refreshResult {
         case .success:
@@ -46,83 +48,87 @@ public final class SilentMoonApiService {
         name: String,
         email: String,
         password: String
-    ) async -> Result<EmptyResponse, Error> {
-        await networkManager.request(
+    ) async -> Result<RegisterResponseEntity, Error> {
+        let result: Result<RegisterResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.register(name: name, email: email, password: password)
         )
+        return result.map { $0.toEntity() }
     }
 
     public func login(
         email: String,
         password: String
-    ) async -> Result<AuthResponse, Error> {
+    ) async -> Result<AuthResponseEntity, Error> {
         let result: Result<AuthResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.login(email: email, password: password)
         )
         
         if case .success(let auth) = result {
-            tokenStore.save(access: auth.accessToken, refresh: auth.refreshToken)
+            tokenStore.save(access: auth.accessToken ?? "", refresh: auth.refreshToken ?? "")
         }
         
-        return result
+        return result.map { $0.toEntity() }
     }
 
     public func verifyEmail(
         email: String,
         otp: String
-    ) async -> Result<AuthResponse, Error> {
+    ) async -> Result<AuthResponseEntity, Error> {
         let result: Result<AuthResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.verifyEmail(email: email, otp: otp)
         )
         
         if case .success(let auth) = result {
-            tokenStore.save(access: auth.accessToken, refresh: auth.refreshToken)
+            tokenStore.save(access: auth.accessToken ?? "", refresh: auth.refreshToken ?? "")
         }
         
-        return result
+        return result.map { $0.toEntity() }
     }
 
     public func resendOtp(
         email: String
-    ) async -> Result<ResendOtpResponse, Error> {
-        await networkManager.request(
+    ) async -> Result<ResendOtpResponseEntity, Error> {
+        let result: Result<ResendOtpResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.resendOtp(email: email)
         )
+        return result.map { $0.toEntity() }
     }
 
     public func googleLogin(
         idToken: String
-    ) async -> Result<AuthResponse, Error> {
+    ) async -> Result<AuthResponseEntity, Error> {
         let result: Result<AuthResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.googleLogin(idToken: idToken)
         )
         
         if case .success(let auth) = result {
-            tokenStore.save(access: auth.accessToken, refresh: auth.refreshToken)
+            tokenStore.save(access: auth.accessToken ?? "", refresh: auth.refreshToken ?? "")
         }
         
-        return result
+        return result.map { $0.toEntity() }
     }
 
     public func forgotPassword(
         email: String
-    ) async -> Result<SimpleMessageResponse, Error> {
-        await networkManager.request(
+    ) async -> Result<SimpleMessageResponseEntity, Error> {
+        let result: Result<SimpleMessageResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.forgotPassword(email: email)
         )
+        return result.map { $0.toEntity() }
     }
 
     public func resetPassword(
         email: String,
         otp: String,
         newPassword: String
-    ) async -> Result<SimpleMessageResponse, Error> {
-        await networkManager.request(
+    ) async -> Result<SimpleMessageResponseEntity, Error> {
+        let result: Result<SimpleMessageResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.resetPassword(email: email, otp: otp, newPassword: newPassword)
         )
+        return result.map { $0.toEntity() }
     }
 
-    public func refreshToken() async -> Result<AuthResponse, Error> {
+    public func refreshToken() async -> Result<AuthResponseEntity, Error> {
         guard let refreshToken = tokenStore.refreshToken else {
             return .failure(AppError<ApiErrorEnvelope>.unauthorized)
         }
@@ -133,12 +139,12 @@ public final class SilentMoonApiService {
         
         switch result {
         case .success(let auth):
-            tokenStore.save(access: auth.accessToken, refresh: auth.refreshToken)
+            tokenStore.save(access: auth.accessToken ?? "", refresh: auth.refreshToken ?? "")
         case .failure:
             tokenStore.clear()
         }
         
-        return result
+        return result.map { $0.toEntity() }
     }
 
     public func logout() async -> Result<Void, Error> {
@@ -166,35 +172,18 @@ public final class SilentMoonApiService {
         type: String? = nil,
         page: Int = 1,
         limit: Int = 20
-    ) async -> Result<SearchResponse, Error> {
-        await networkManager.request(
+    ) async -> Result<SearchResponseEntity, Error> {
+        let result: Result<SearchResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.search(query: query, type: type, page: page, limit: limit)
         )
+        return result.map { $0.toEntity() }
     }
 
     public func getTopics() async -> Result<[String], Error> {
-        
         await requestWithRefresh(endPoint: SilentMoonEndPoint.getTopics)
     }
 
     public func updateTopics(topicIds: [String]) async -> Result<[String], Error> {
         await requestWithRefresh(endPoint: SilentMoonEndPoint.updateTopics(topicIds: topicIds))
     }
-
-    public func setReminder(time: String, days: [Int], message: String) async -> Result<ReminderResponse, Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.setReminder(time: time, days: days, message: message))
-    }
-
-    public func getReminders() async -> Result<[ReminderResponse], Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.getReminders)
-    }
-
-    public func updateReminder(id: String, time: String, days: [Int], message: String) async -> Result<ReminderResponse, Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.updateReminder(id: id, time: time, days: days, message: message))
-    }
-
-    public func deleteReminder(id: String) async -> Result<EmptyResponse, Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.deleteReminder(id: id))
-    }
-
 }
