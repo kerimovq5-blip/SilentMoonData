@@ -7,11 +7,12 @@
 
 import Foundation
 import SilentMoonNetwork
+import SilentMoonDomain
 
 public struct NetworkFactory {
     public static func make() -> (
         tokenStore: TokenStore,
-        apiService: SilentMoonApiService,
+        apiService: SilentMoonRepository,
         networkManager: NetworkManager<ApiErrorEnvelope>
     ) {
 
@@ -32,7 +33,7 @@ public struct NetworkFactory {
             tokenStore: tokenStore
         )
         
-        let apiService = SilentMoonApiService(
+        let apiService = SilentMoonRepositoryImpl(
             networkManager: networkManager,
             tokenStore: tokenStore
         )

@@ -7,6 +7,7 @@
 
 import Foundation
 import SilentMoonNetwork
+import SilentMoonDomain
 
 public enum SilentMoonEndPoint: EndPoint {
     
@@ -98,7 +99,11 @@ public enum SilentMoonEndPoint: EndPoint {
     public var requestBody: RequestBody? {
         switch self {
         case .register(let name, let email, let password):
-            let dto = RegisterRequest(name: name, email: email, password: password)
+            let dto = RegisterRequestEntity(
+                name: name,
+                email: email,
+                password: password
+            )
             return .encodable(dto)
         case .login(let email, let password):
             return .dictionary(["email": email, "password": password])
