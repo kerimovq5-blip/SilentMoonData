@@ -4,12 +4,19 @@
 //
 //  Created by Kerimov Qehreman on 15.08.26.
 //
+import Foundation
+import SilentMoonDomain
 
 public struct ErrorModel : Decodable  ,Error {
    private(set) var statuscode: Int?
     let statusmessage: String?
     let success: Bool?
-
+    
+    public init(entity: ErrorEntity) {
+        self.statuscode = entity.statuscode
+        self.statusmessage = entity.statusmessage
+        self.success = entity.success
+    }
     enum CodingKeys: String, CodingKey {
         case statuscode = "status_code"
         case statusmessage = "status_message"

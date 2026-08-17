@@ -6,16 +6,16 @@
 //
 
 import Foundation
-
+import SilentMoonDomain
    public struct RegisterRequest: Encodable {
        public let name: String
        public let email: String
        public let password: String
        
-   public init(name: String, email: String, password: String) {
-           self.name = name
-           self.email = email
-           self.password = password
+       public init(entity : RegisterRequestEntity) {
+           self.name = entity.name
+           self.email = entity.email
+           self.password = entity.password
        }
      
       public  enum CodingKeys: String, CodingKey {

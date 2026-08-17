@@ -17,6 +17,10 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kerimovq5-blip/SilentMoonNetwork", branch: "main"),
+        .package(
+            url: "https://github.com/kerimovq5-blip/SilentMoonDomain" ,
+            branch: "main"
+        )
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -24,7 +28,8 @@ let package = Package(
         .target(
             name: "SilentMoonData" ,
             dependencies: [
-                .product(name: "SilentMoonNetwork", package: "SilentMoonNetwork")
+                .product(name: "SilentMoonNetwork", package: "SilentMoonNetwork") ,
+                .product(name: "SilentMoonDomain", package: "SilentMoonDomain")
             ]
         ),
 

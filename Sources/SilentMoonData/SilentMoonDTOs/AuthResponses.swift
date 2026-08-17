@@ -5,15 +5,14 @@
 //  Created by Kerimov Qehreman on 09.08.26.
 //
 
-
-
 import Foundation
+import SilentMoonDomain
 
 public struct SimpleMessageResponse: Decodable, Sendable {
     public let message: String
     
-    public init(message: String) {
-        self.message = message
+    public init(entity : SimpleMessageResponseEntity ) {
+        self.message = entity.message
     }
 }
 
@@ -21,9 +20,9 @@ public struct ResendOtpResponse: Decodable, Sendable {
     public let message: String
     public let otpExpiresAt: String
     
-    public init(message: String, otpExpiresAt: String) {
-        self.message = message
-        self.otpExpiresAt = otpExpiresAt
+    public init(entity : ResendOtpResponseEntity) {
+        self.message = entity.message
+        self.otpExpiresAt = entity.otpExpiresAt
     }
 }
 
@@ -35,17 +34,13 @@ public struct AuthResponse: Decodable, Sendable {
     public let user: UserProfile
     
     public init(
-        accessToken: String,
-        refreshToken: String,
-        tokenType: String,
-        expiresIn: Int,
-        user: UserProfile
+        entity : AuthResponseEntity
     ) {
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-        self.tokenType = tokenType
-        self.expiresIn = expiresIn
-        self.user = user
+        self.accessToken = entity.accessToken
+        self.refreshToken = entity.refreshToken
+        self.tokenType = entity.tokenType
+        self.expiresIn = entity.expiresIn
+        self.user = UserProfile(entity: entity.user)
     }
 }
 
@@ -58,18 +53,13 @@ public struct UserProfile: Decodable, Sendable {
     public let createdAt: String
     
     public init(
-        id: String,
-        name: String,
-        email: String,
-        emailVerified: Bool,
-        avatarUrl: String?,
-        createdAt: String
+        entity : UserProfileEntity
     ) {
-        self.id = id
-        self.name = name
-        self.email = email
-        self.emailVerified = emailVerified
-        self.avatarUrl = avatarUrl
-        self.createdAt = createdAt
+        self.id = entity.id
+        self.name = entity.name
+        self.email = entity.email
+        self.emailVerified = entity.emailVerified
+        self.avatarUrl = entity.avatarUrl
+        self.createdAt = entity.createdAt
     }
 }
