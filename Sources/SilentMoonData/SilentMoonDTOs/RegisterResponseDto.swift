@@ -12,10 +12,12 @@ public struct RegisterResponse: Decodable {
     public let email: String?
     public let otpExpiresAt: String?
     
-    public init(entity : RegisterResponseEntity) {
-        self.message = entity.message
-        self.email = entity.email
-        self.otpExpiresAt = entity.otpExpiresAt
+    public func toEntity() -> RegisterResponseEntity {
+        .init(
+            message: message ?? "",
+            email: email ?? "",
+            otpExpiresAt: otpExpiresAt ?? ""
+        )
     }
  
     enum CodingKeys: String, CodingKey {

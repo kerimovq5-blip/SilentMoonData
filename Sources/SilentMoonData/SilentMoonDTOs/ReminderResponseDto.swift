@@ -9,16 +9,18 @@ import Foundation
 import SilentMoonDomain
  
 public struct ReminderResponse: Decodable, Sendable {
-    public let id: String
-    public let time: String
-    public let days: [Int]
-    public let message: String
+    public let id: Int?
+    public let time: String?
+    public let days: [Int]?
+    public let message: String?
     
-    public init (entity : ReminderResponseEntity) {
-        self.id = entity.id
-        self.time = entity.time
-        self.days = entity.days
-        self.message = entity.message
+    public func toEntity () -> ReminderResponseEntity {
+        .init(
+            id: id ?? -1,
+            time: time ?? "",
+            days: days ?? [],
+            message: message ?? ""
+        )
     }
     enum CodingKeys: String, CodingKey {
         case id, time, days, message

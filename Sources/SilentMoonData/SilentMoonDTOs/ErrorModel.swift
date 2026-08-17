@@ -12,10 +12,12 @@ public struct ErrorModel : Decodable  ,Error {
     let statusmessage: String?
     let success: Bool?
     
-    public init(entity: ErrorEntity) {
-        self.statuscode = entity.statuscode
-        self.statusmessage = entity.statusmessage
-        self.success = entity.success
+    public func toEntity() -> ErrorEntity {
+        .init(
+            statuscode: statuscode ?? -1,
+            statusmessage: localizedDescription ,
+            success: success ?? false
+        )
     }
     enum CodingKeys: String, CodingKey {
         case statuscode = "status_code"
