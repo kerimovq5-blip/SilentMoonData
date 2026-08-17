@@ -99,12 +99,12 @@ public enum SilentMoonEndPoint: EndPoint {
     public var requestBody: RequestBody? {
         switch self {
         case .register(let name, let email, let password):
-            let dto = RegisterRequestEntity(
+            let entity = RegisterRequestEntity(
                 name: name,
                 email: email,
                 password: password
             )
-            return .encodable(dto)
+            return .encodable(RegisterRequest(entity: entity))
         case .login(let email, let password):
             return .dictionary(["email": email, "password": password])
         case .verifyEmail(let email, let otp):
