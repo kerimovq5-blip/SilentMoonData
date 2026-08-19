@@ -21,7 +21,10 @@ public enum SilentMoonEndPoint: EndPoint {
     case forgotPassword(email: String)
     case resetPassword(email: String, otp: String, newPassword: String)
     
-    case search(query: String, type: String? = nil, page: Int = 1, limit: Int = 20)
+    case getCourses
+    case getCourseDetail(id: Int)
+    
+    case search(query: String, type: String? = nil, page: Int, limit: Int)
     case getTopics
     case updateTopics(topicIds: [String])
     case setReminder(time: String, days: [Int], message: String)
@@ -61,6 +64,10 @@ public enum SilentMoonEndPoint: EndPoint {
             return "onboarding/reminders/\(id)"
         case .deleteReminder(let id):
             return "onboarding/reminders/\(id)"
+        case .getCourses:
+            return "courses/"
+        case .getCourseDetail(let id):
+            return "courses/\(id)"
         }
     }
 
@@ -68,7 +75,7 @@ public enum SilentMoonEndPoint: EndPoint {
         switch self {
         case .register, .login, .verifyEmail, .resendOtp, .logout, .refresh, .googleLogin, .forgotPassword, .resetPassword, .setReminder:
             return .post
-        case .search,  .getTopics, .getReminders:
+        case .search, .getTopics, .getReminders, .getCourses, .getCourseDetail:
             return .get
         case .updateTopics:
             return .put
@@ -121,22 +128,20 @@ public enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["email": email])
         case .resetPassword(let email, let otp, let newPassword):
             return .dictionary(["email": email, "otp": otp, "newPassword": newPassword])
-        case .search, .getTopics:
-            return nil
         case .updateTopics(let topicIds):
             return .dictionary(["topicIds": topicIds])
         case .setReminder(let time, let days, let message):
             return .dictionary(["time": time, "days": days, "message": message])
-        case .getReminders, .deleteReminder:
-            return nil
         case .updateReminder(_, let time, let days, let message):
             return .dictionary(["time": time, "days": days, "message": message])
+        case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail:
+            return nil
         }
     }
 
     public var requiresAuth: Bool {
         switch self {
-        case .logout, .getTopics, .updateTopics, .setReminder, .getReminders, .updateReminder, .deleteReminder:
+        case .logout, .getTopics, .updateTopics, .setReminder, .getReminders, .updateReminder, .deleteReminder, .getCourses, .getCourseDetail:
             return true
         default:
             return false
