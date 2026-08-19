@@ -33,6 +33,18 @@ public struct CourseSummary: Decodable, Sendable {
             narrators: narrators ?? []
         )
     }
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case title
+        case subtitle
+        case type
+        case categoryId = "category_id"
+        case imageUrl = "image_url"
+        case durationSec = "duration_sec"
+        case isFeatured = "is_featured"
+        case narrators
+    }
 }
 
 public struct PaginationMeta: Decodable, Sendable {
@@ -49,6 +61,12 @@ public struct PaginationMeta: Decodable, Sendable {
             totalPages: totalPages ?? 0
         )
     }
+    enum CodingKeys: String, CodingKey {
+        case page
+        case limit
+        case total
+        case totalPages = "total_pages"
+    }
 }
 
 public struct SearchResponse: Decodable, Sendable {
@@ -62,5 +80,10 @@ public struct SearchResponse: Decodable, Sendable {
             data: data?.map { $0.toEntity() } ?? [],
             meta: meta?.toEntity() ?? .init(page: 1, limit: 10, total: 0, totalPages: 0)
         )
+    }
+    enum CodingKeys: String, CodingKey {
+        case query
+        case data
+        case meta
     }
 }

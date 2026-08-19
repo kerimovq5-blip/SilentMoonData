@@ -14,7 +14,6 @@ public struct EmptyResponse: Decodable {
 }
 
 public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Sendable {
-
     private let networkManager: NetworkManager<ApiErrorEnvelope>
     private let tokenStore: TokenStore
 
@@ -180,11 +179,11 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
         return result.map { $0.toEntity() }
     }
 
-    public func getTopics() async -> Result<[String], Error> {
+    public func getTopics() async -> Result<ChooseTopicEntity, Error> {
         await requestWithRefresh(endPoint: SilentMoonEndPoint.getTopics)
     }
 
-    public func updateTopics(topicIds: [String]) async -> Result<[String], Error> {
+    public func updateTopics(topicIds: [Int]) async -> Result<UpdateTopicEntity, Error> {
         await requestWithRefresh(endPoint: SilentMoonEndPoint.updateTopics(topicIds: topicIds))
     }
     
@@ -225,5 +224,12 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
         return result.map { _ in () }
     }
     
+    public func getCourses(page: Int, limit: Int) async -> Result<CoursesResponseEntity, any Error> {
+        let result : Result<CoursesResponseDto, Error> = await requestWithRefresh(endPoint: SilentMoonEndPoint.getCourses)
+    }
+
+    public func getCourseDetail(id: Int) async -> Result<CourseEntity, any Error> {
+        
+    }
     
 }
