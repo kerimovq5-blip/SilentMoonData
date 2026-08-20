@@ -44,10 +44,7 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
         }
     }
 
-    public func register(
-        name: String,
-        email: String,
-        password: String
+    public func register(name: String,email: String,password: String
     ) async -> Result<RegisterResponseEntity, Error> {
         let result: Result<RegisterResponse, Error> = await networkManager.request(
             endPoint: SilentMoonEndPoint.register(name: name, email: email, password: password)
