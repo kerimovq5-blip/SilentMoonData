@@ -35,7 +35,8 @@ public struct NetworkFactory {
         
         let apiService = UseCasesImplemantation(
             networkManager: networkManager,
-            tokenStore: tokenStore
+            tokenStore: tokenStore,
+            usecases: 
         )
         
         return (tokenStore, apiService, networkManager)
