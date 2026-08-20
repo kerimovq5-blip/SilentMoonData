@@ -8,31 +8,31 @@
 import Foundation
 import SilentMoonDomain
 
-
-public struct TopicsModelsDto: Decodable , Sendable {
-    public let id : Int?
-    public let title : String?
+public struct TopicsModelsDto: Decodable, Sendable {
+    public let topicsId: Int?
+    public let title: String?
     
-   public func toEntity() -> TopicsModelsEntity{
-       .init (
-        id: id ?? 0,
-        title: title ?? ""
-       )
-        
-    }
     enum CodingKeys: String, CodingKey {
-        case id
-        case title
+        case topicsId = "topicsId"
+        case title = "title"
+    }
+    
+    public func toEntity() -> ChooseTopicEntity {
+        ChooseTopicEntity(
+            topicsId: topicsId ?? 0,
+            title: title ?? ""
+        )
     }
 }
 
-public struct UpdateTopicsRequestDto: Encodable, Sendable {
-    public let topicIds: UpdateTopicEntity
+public struct UpdateTopicsRequestDto: Decodable, Sendable {
+    public let topicIds: [Int]
     
-    public init(entity: UpdateTopicEntity) {
-        self.topicIds = entity.topicIds
+    public init(topicIds: [Int]) {
+        self.topicIds = topicIds
     }
+    
     enum CodingKeys: String, CodingKey {
-        case topicIds
+        case topicIds = "topicIds"
     }
 }

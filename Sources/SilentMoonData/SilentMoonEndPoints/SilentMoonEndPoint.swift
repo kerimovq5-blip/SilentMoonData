@@ -21,12 +21,12 @@ public enum SilentMoonEndPoint: EndPoint {
     case forgotPassword(email: String)
     case resetPassword(email: String, otp: String, newPassword: String)
     
-    case getCourses
+    case getCourses(page: Int, limit: Int)
     case getCourseDetail(id: Int)
     
     case search(query: String, type: String? = nil, page: Int, limit: Int)
     case getTopics
-    case updateTopics(topicIds: [String])
+    case updateTopics(topicIds: [Int])
     case setReminder(time: String, days: [Int], message: String)
     case getReminders
     case updateReminder(id: Int, time: String, days: [Int], message: String)
@@ -98,6 +98,11 @@ public enum SilentMoonEndPoint: EndPoint {
                 items.append(URLQueryItem(name: "type", value: type))
             }
             return items
+        case .getCourses(let page, let limit):
+            return [
+                URLQueryItem(name: "page", value: "\(page)"),
+                URLQueryItem(name: "limit", value: "\(limit)")
+            ]
         default:
             return []
         }

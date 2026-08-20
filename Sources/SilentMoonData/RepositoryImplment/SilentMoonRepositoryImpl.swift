@@ -179,12 +179,18 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
         return result.map { $0.toEntity() }
     }
 
-    public func getTopics() async -> Result<ChooseTopicEntity, Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.getTopics)
+    public func getTopics() async -> Result<[ChooseTopicEntity], Error> {
+        let result: Result<[TopicsModelsDto], Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.getTopics
+        )
+        return result.map { dtos in dtos.map { $0.toEntity() } }
     }
 
-    public func updateTopics(topicIds: [Int]) async -> Result<UpdateTopicEntity, Error> {
-        await requestWithRefresh(endPoint: SilentMoonEndPoint.updateTopics(topicIds: topicIds))
+    public func updateTopics(topicIds: [Int]) async -> Result<[ChooseTopicEntity], Error> {
+        let result: Result<[TopicsModelsDto], Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.updateTopics(topicIds: topicIds)
+        )
+        return result.map { dtos in dtos.map { $0.toEntity() } }
     }
     
     public func getReminders() async -> Result<[ReminderResponseEntity], Error> {
@@ -224,12 +230,17 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
         return result.map { _ in () }
     }
     
-    public func getCourses(page: Int, limit: Int) async -> Result<CoursesResponseEntity, any Error> {
-        let result : Result<CoursesResponseDto, Error> = await requestWithRefresh(endPoint: SilentMoonEndPoint.getCourses)
-    }
+    public func getCourses(page: Int, limit: Int) async -> Result<CoursesResponseEntity, Error> {
+            let result: Result<CoursesResponseDto, Error> = await requestWithRefresh(
+                endPoint: SilentMoonEndPoint.getCourses(page: page, limit: limit)
+            )
+            return result.map { $0.toEntity() }
+        }
 
-    public func getCourseDetail(id: Int) async -> Result<CourseEntity, any Error> {
-        
+        public func getCourseDetail(id: Int) async -> Result<CourseEntity, Error> {
+            let result: Result<CourseDto, Error> = await requestWithRefresh(
+                endPoint: SilentMoonEndPoint.getCourseDetail(id: id)
+            )
+            return result.map { $0.toEntity() }
+        }
     }
-    
-}

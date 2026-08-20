@@ -21,7 +21,7 @@ public struct CourseDto: Decodable, Sendable {
         case imageUrl = "image_url"
     }
 
-    public func toDomain() -> CourseEntity {
+    public func toEntity() -> CourseEntity {
         CourseEntity(
             id: id ?? 0,
             title: title ?? "",
@@ -38,15 +38,15 @@ public struct CoursesResponseDto: Decodable, Sendable {
     public let totalPages: Int?
     
     enum CodingKeys: String, CodingKey {
-        case items = "courses" 
+        case items = "courses"
         case page
         case limit
         case totalPages = "total_pages"
     }
     
-    public func toDomain() -> CoursesResponseEntity {
+    public func toEntity() -> CoursesResponseEntity {
         CoursesResponseEntity(
-            items: items?.map { $0.toDomain() } ?? [],
+            items: items?.map { $0.toEntity() } ?? [],
             page: page ?? 1,
             limit: limit ?? 10,
             totalPages: totalPages
