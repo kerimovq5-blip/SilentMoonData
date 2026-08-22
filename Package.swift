@@ -17,11 +17,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/kerimovq5-blip/SilentMoonNetwork",
-                 revision: "7dd441c"
+                 revision: "f626055bbd7490a28829b5e50901180ace7f11d1"
                 ),
         .package(
             url: "https://github.com/kerimovq5-blip/SilentMoonDomain" ,
-            branch: "main"
+            revision: "ece58890e81b5256688a4be9f69c0c817f4fda18"
         )
     ],
     targets: [
@@ -35,6 +35,6 @@ let package = Package(
             ]
         ),
 
-    ]
-    //swiftLanguageModes: [.v6]
+    ],
+    swiftLanguageModes: [.version("6.0")]
 )
