@@ -1,12 +1,12 @@
 {
-  "originHash" : "9eb3d7370645191edd5b04347abdc08f83f985ab146b1b1c735cf5d5de9b5daf",
+  "originHash" : "8a024ddc55aeab1f7ff9584a7a22fc73e22d9c19b28d9b061c9f4bdf15e84907",
   "pins" : [
     {
       "identity" : "silentmoondomain",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kerimovq5-blip/SilentMoonDomain",
       "state" : {
-        "revision" : "e6aa13056d2a4cf133132cdba42f79309d5a40ce"
+        "revision" : "96949a7025e433ed6a62ceb3c1ac79df2da046df"
       }
     },
     {
