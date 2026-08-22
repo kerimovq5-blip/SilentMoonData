@@ -16,7 +16,9 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/kerimovq5-blip/SilentMoonNetwork", branch: "main"),
+        .package(url: "https://github.com/kerimovq5-blip/SilentMoonNetwork",
+                 revision: "7dd441c"
+                ),
         .package(
             url: "https://github.com/kerimovq5-blip/SilentMoonDomain" ,
             branch: "main"
