@@ -20,7 +20,9 @@ public enum SilentMoonEndPoint: EndPoint {
     case googleLogin(idToken: String)
     case forgotPassword(email: String)
     case resetPassword(email: String, otp: String, newPassword: String)
-    
+    case updateAccount(name : String , lastname : String , avatar: String)
+//    case getAccountHome
+//    case getUserProfile(id: Int)
     case getCourses(page: Int, limit: Int)
     case getCourseDetail(id: Int)
     
@@ -68,6 +70,12 @@ public enum SilentMoonEndPoint: EndPoint {
             return "courses/"
         case .getCourseDetail(let id):
             return "courses/\(id)"
+        case .updateAccount(
+            name: let name,
+            lastname: let lastname,
+            avatar: let avatar
+        ):
+            <#code#>
         }
     }
 
@@ -83,6 +91,12 @@ public enum SilentMoonEndPoint: EndPoint {
             return .patch
         case .deleteReminder:
             return .delete
+        case .updateAccount(
+            name: let name,
+            lastname: let lastname,
+            avatar: let avatar
+        ):
+            <#code#>
         }
     }
 
@@ -141,6 +155,12 @@ public enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["time": time, "days": days, "message": message])
         case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail:
             return nil
+        case .updateAccount(
+            name: let name,
+            lastname: let lastname,
+            avatar: let avatar
+        ):
+            <#code#>
         }
     }
 
