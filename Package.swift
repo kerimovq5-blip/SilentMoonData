@@ -21,7 +21,7 @@ let package = Package(
                 ),
         .package(
             url: "https://github.com/kerimovq5-blip/SilentMoonDomain" ,
-            revision: "5dd84ea45be5e749cff94420f878023525695439"
+            revision: "e6aa13056d2a4cf133132cdba42f79309d5a40ce"
         )
     ],
     targets: [
