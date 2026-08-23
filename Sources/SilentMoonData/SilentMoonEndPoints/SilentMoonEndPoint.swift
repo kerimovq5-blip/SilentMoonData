@@ -1,13 +1,13 @@
 //
 //  SilentMoonEndPoint.swift
-//  SilentMoonNetwork
+//  SilentMoonData
 //
 //  Created by Kerimov Qehreman on 07.08.26.
 //
 
 import Foundation
-import SilentMoonNetwork
 import SilentMoonDomain
+import SilentMoonNetwork
 
 public enum SilentMoonEndPoint: EndPoint {
     
@@ -20,9 +20,11 @@ public enum SilentMoonEndPoint: EndPoint {
     case googleLogin(idToken: String)
     case forgotPassword(email: String)
     case resetPassword(email: String, otp: String, newPassword: String)
-    //case updateAccount(name : String , lastname : String , avatar: String)
-    //case getAccountHome
-    //case getUserProfile(id: Int)
+
+    case getProfile
+    case updateProfile(firstName: String?, lastName: String?, avatarUrl: String?)
+    case getHome
+
     case getCourses(page: Int, limit: Int)
     case getCourseDetail(id: Int)
     
@@ -54,6 +56,10 @@ public enum SilentMoonEndPoint: EndPoint {
             return "/account/forgot-password"
         case .resetPassword:
             return "/account/reset-password"
+        case .getProfile, .updateProfile:
+            return "me"
+        case .getHome:
+            return "me/home"
         case .search:
             return "search"
         case .getTopics, .updateTopics:
@@ -77,11 +83,11 @@ public enum SilentMoonEndPoint: EndPoint {
         switch self {
         case .register, .login, .verifyEmail, .resendOtp, .logout, .refresh, .googleLogin, .forgotPassword, .resetPassword, .setReminder:
             return .post
-        case .search, .getTopics, .getReminders, .getCourses, .getCourseDetail:
+        case .search, .getTopics, .getReminders, .getCourses, .getCourseDetail, .getProfile, .getHome:
             return .get
         case .updateTopics:
             return .put
-        case .updateReminder:
+        case .updateReminder, .updateProfile:
             return .patch
         case .deleteReminder:
             return .delete
@@ -135,20 +141,27 @@ public enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["email": email])
         case .resetPassword(let email, let otp, let newPassword):
             return .dictionary(["email": email, "otp": otp, "newPassword": newPassword])
+        case .updateProfile(let firstName, let lastName, let avatarUrl):
+            var body: [String: Encodable] = [:]
+            if let firstName { body["firstName"] = firstName }
+            if let lastName { body["lastName"] = lastName }
+            if let avatarUrl { body["avatarUrl"] = avatarUrl }
+            return .dictionary(body)
         case .updateTopics(let topicIds):
             return .dictionary(["topicIds": topicIds])
         case .setReminder(let time, let days, let message):
             return .dictionary(["time": time, "days": days, "message": message])
         case .updateReminder(_, let time, let days, let message):
             return .dictionary(["time": time, "days": days, "message": message])
-        case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail:
+        case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .getHome:
             return nil
         }
     }
 
     public var requiresAuth: Bool {
         switch self {
-        case .logout, .getTopics, .updateTopics, .setReminder, .getReminders, .updateReminder, .deleteReminder, .getCourses, .getCourseDetail:
+        case .logout, .getTopics, .updateTopics, .setReminder, .getReminders, .updateReminder,
+             .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .updateProfile, .getHome:
             return true
         default:
             return false

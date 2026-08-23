@@ -7,12 +7,10 @@
 
 import Foundation
 import SilentMoonNetwork
-import SilentMoonDomain
 
 public struct NetworkFactory {
     public static func make() -> (
         tokenStore: TokenStore,
-        apiService: SilentMoonRepository,
         networkManager: NetworkManager<ApiErrorEnvelope>
     ) {
 
@@ -22,7 +20,7 @@ public struct NetworkFactory {
                 refreshToken: "silentmoon.refreshToken"
             )
         )
-        
+
         let networkManager = NetworkManager<ApiErrorEnvelope>(
             session: URLSession.shared,
             mainPath: "http://13.48.242.142:30080/api/v1",
@@ -32,12 +30,7 @@ public struct NetworkFactory {
             ],
             tokenStore: tokenStore
         )
-        
-        let apiService = SilentMoonRepositoryImpl(
-            networkManager: networkManager,
-            tokenStore: tokenStore
-        )
-        
-        return (tokenStore, apiService, networkManager)
+
+        return (tokenStore, networkManager)
     }
 }

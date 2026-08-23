@@ -33,7 +33,7 @@ public struct AuthResponse: Decodable, Sendable {
     public let refreshToken: String?
     public let tokenType: String?
     public let expiresIn: Int?
-    public let user: UserProfile?
+    public let user: UserProfileDto? 
     
     public func toEntity() -> AuthResponseEntity {
         .init(
@@ -41,27 +41,15 @@ public struct AuthResponse: Decodable, Sendable {
             refreshToken: refreshToken ?? "",
             tokenType: tokenType ?? "",
             expiresIn: expiresIn ?? -1,
-            user: user?.toEntity() ?? .init(id: "", name: "", email: "", emailVerified: false, avatarUrl: nil, createdAt: "")
+            user: user?.toEntity() ?? .init(
+                id: -1,
+                firstName: "",
+                lastName: "",
+                userName: "",
+                email: "",
+                avatarUrl: nil
+            )
         )
     }
 }
 
-public struct UserProfile: Decodable, Sendable {
-    public let id: String?
-    public let name: String?
-    public let email: String?
-    public let emailVerified: Bool?
-    public let avatarUrl: String?
-    public let createdAt: String?
-    
-    public func toEntity() -> UserProfileEntity {
-        .init(
-            id: id ?? "",
-            name: name ?? "",
-            email: email ?? "",
-            emailVerified: emailVerified ?? false,
-            avatarUrl: avatarUrl,
-            createdAt: createdAt ?? ""
-        )
-    }
-}

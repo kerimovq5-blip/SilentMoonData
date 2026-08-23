@@ -241,5 +241,26 @@ public final class SilentMoonRepositoryImpl: SilentMoonRepository, @unchecked Se
             return result.map { $0.toEntity() }
         }
     
+    public func getProfile() async -> Result<UserProfileEntity, Error> {
+        let result: Result<UserProfileDto, Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.getProfile
+        )
+        return result.map { $0.toEntity() }
+    }
+ 
+    public func updateProfile(
+        firstName: String?,
+        lastName: String?,
+        avatarUrl: String?
+    ) async -> Result<UserProfileEntity, Error> {
+        let result: Result<UserProfileDto, Error> = await requestWithRefresh(
+            endPoint: SilentMoonEndPoint.updateProfile(
+                firstName: firstName,
+                lastName: lastName,
+                avatarUrl: avatarUrl
+            )
+        )
+        return result.map { $0.toEntity() }
+    }
     
     }
