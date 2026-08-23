@@ -35,6 +35,10 @@ public enum SilentMoonEndPoint: EndPoint {
     case getReminders
     case updateReminder(id: Int, time: String, days: [Int], message: String)
     case deleteReminder(id: Int)
+    
+    case getFavoriteCourses
+    case addFavoriteCourse(id: Int)
+    case removeFavoriteCourse(id: Int)
 
     public var path: String {
         switch self {
@@ -57,39 +61,45 @@ public enum SilentMoonEndPoint: EndPoint {
         case .resetPassword:
             return "/account/reset-password"
         case .getProfile, .updateProfile:
-            return "me"
+            return "/me"
         case .getHome:
-            return "me/home"
+            return "/me/home"
         case .search:
-            return "search"
+            return "/search"
         case .getTopics, .updateTopics:
-            return "onboarding/topics"
+            return "/onboarding/topics"
         case .setReminder:
-            return "onboarding/reminders"
+            return "/onboarding/reminders"
         case .getReminders:
-            return "onboarding/reminders"
+            return "/onboarding/reminders"
         case .updateReminder(let id, _, _, _):
-            return "onboarding/reminders/\(id)"
+            return "/onboarding/reminders/\(id)"
         case .deleteReminder(let id):
-            return "onboarding/reminders/\(id)"
+            return "/onboarding/reminders/\(id)"
         case .getCourses:
-            return "courses/"
+            return "/courses"
         case .getCourseDetail(let id):
-            return "courses/\(id)"
+            return "/courses/\(id)"
+        case .getFavoriteCourses :
+            return "/favorites"
+        case .addFavoriteCourse(id: let id):
+            return "/favorites/\(id)"
+        case .removeFavoriteCourse(id: let id):
+            return "/favorites/\(id)"
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .register, .login, .verifyEmail, .resendOtp, .logout, .refresh, .googleLogin, .forgotPassword, .resetPassword, .setReminder:
+        case .register, .login, .verifyEmail, .resendOtp, .logout, .refresh, .googleLogin, .forgotPassword, .resetPassword, .setReminder , .addFavoriteCourse:
             return .post
-        case .search, .getTopics, .getReminders, .getCourses, .getCourseDetail, .getProfile, .getHome:
+        case .search, .getTopics, .getReminders, .getCourses, .getCourseDetail, .getProfile, .getHome , .getFavoriteCourses:
             return .get
         case .updateTopics:
             return .put
         case .updateReminder, .updateProfile:
             return .patch
-        case .deleteReminder:
+        case .deleteReminder , .removeFavoriteCourse:
             return .delete
         }
     }
@@ -153,15 +163,20 @@ public enum SilentMoonEndPoint: EndPoint {
             return .dictionary(["time": time, "days": days, "message": message])
         case .updateReminder(_, let time, let days, let message):
             return .dictionary(["time": time, "days": days, "message": message])
-        case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .getHome:
+        case .search, .getTopics, .getReminders, .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .getHome , .getFavoriteCourses:
             return nil
+        case .addFavoriteCourse(id: let id):
+            return .dictionary(["id": id])
+        case .removeFavoriteCourse(id: let id):
+            return .dictionary(["id": id])
         }
     }
 
     public var requiresAuth: Bool {
         switch self {
         case .logout, .getTopics, .updateTopics, .setReminder, .getReminders, .updateReminder,
-             .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .updateProfile, .getHome:
+             .deleteReminder, .getCourses, .getCourseDetail, .getProfile, .updateProfile, .getHome,
+             .getFavoriteCourses, .addFavoriteCourse, .removeFavoriteCourse:
             return true
         default:
             return false

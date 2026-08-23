@@ -20,12 +20,5 @@ public struct UserProfileDto: Decodable, Sendable {
         )
     }
     
-    enum CodingKeys: String, CodingKey {
-        case id
-        case firstName = "first_name" 
-        case lastName = "last_name"
-        case userName = "user_name"
-        case email
-        case avatarUrl = "avatar_url"
-    }
+    
 }
