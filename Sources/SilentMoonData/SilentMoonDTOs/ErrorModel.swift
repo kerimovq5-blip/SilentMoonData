@@ -41,3 +41,5 @@ public struct ErrorModel : Decodable  ,Error {
 
     }
 }
+
+
